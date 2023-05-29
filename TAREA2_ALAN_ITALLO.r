@@ -1,4 +1,4 @@
-# cargar librerias
+cfhcfhcfhcfh# cargar librerias
 library(terra)
 library(sf)
 library(dplyr)
