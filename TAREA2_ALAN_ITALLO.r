@@ -88,7 +88,7 @@ text(x = barplot(table(lc.crop_vec), col = c("yellow", "purple", "blue", "green"
      y = table(lc.crop_vec),
      labels = table(lc.crop_vec),
      pos = 3)
-
+o
 separate_eight_day_composite = function(x, fechas){
   # dias que faltan para terminar el mes
   days.dif = 1+(days_in_month(fechas) - day(fechas))
