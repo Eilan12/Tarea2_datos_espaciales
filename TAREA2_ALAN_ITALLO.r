@@ -74,6 +74,7 @@ writeRaster(lc.crop, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC
 
 plot(lc.crop, col = c("yellow","purple","blue","green"))# plotear lc cortado, cambiamos color de las categorias
 
+hola amigo jijijijiji
 
 separate_eight_day_composite = function(x, fechas){
   # dias que faltan para terminar el mes
