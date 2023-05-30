@@ -46,45 +46,32 @@ plot(imgs.m)
 imgs.cm = crop(imgs.m, vect(v))
 plot(imgs.cm)
 
-imgs.r2 = project(imgs.cm, "epsg:4326", method = "near")
-plot(imgs.r2[[2]])
+imgs.r = project(imgs.cm, vect(km), method = "near")
+plot(imgs.r[[5]])
 
 options(scipen = 999)
-
-# imagenes previas al incendio
-folder = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/landsat"
-files = list.files(folder, full.names = TRUE)
-r = rast(files)
-nombre.bandas = c("B5","B7")
-names(r) = nombre.bandas
-plot(r$B5, main = "Banda 5")
-r = r * 0.0000275 - 0.2
-preB5 = r$B5
-preB7 = r$B7
-plot(preB5, main = "Banda 5")
-plot(preB7, main = "Banda 7")
-writeRaster(preB5, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/preB5.tif")
-writeRaster(preB7, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/preB7.tif")
-
 
 lc.file = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_CHILE_2014_b.tif"
 lc = rast(lc.file)
 
+# proyecamos el lc a la proyeccion de la imagen satelital
+lc.proj = project(lc, imgs.r[[5]], method = "bilinear") # metodo bilinear para datos categoricos
+lc.crop = crop(lc.proj, imgs.r[[5]]) # cortamos el lc al extent de la imagen
+plot(lc.crop)
+
 # En este caso vamos a considerar solo las categorias de cultivos(100), bosques(200), praderas(300) y matorrales (400)
 
 # Modificar pixeles de un raster
-lc[lc != 100 & lc != 200 & lc != 300 & lc != 400] = NA # selecciona todos los pixeles diferentes a 100, 200, 300 y 400 y les asiga NA
+lc.crop[lc.crop >= 500] = NA # selecciona todos los pixeles diferentes a 100, 200, 300 y 400 y les asiga NA
+lc.crop[lc.crop <= 200 & lc.crop >=100] = 100
+lc.crop[lc.crop <= 300 & lc.crop >=200] = 200
+lc.crop[lc.crop <= 400 & lc.crop >=300] = 300
+lc.crop[lc.crop <= 500 & lc.crop >=400] = 400
 
 # guardamos el LandCover reclasificado
-writeRaster(lc, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_reclasificado.tif")
+writeRaster(lc.crop, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_reclasificado.tif", overwrite = TRUE)
 
-# leer LC reclasificado
-lc = rast("C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_reclasificado.tif")
-
-# proyecamos el lc a la proyeccion de la imagen satelital
-lc.proj = project(lc, imgs.r2[[2]], method = "near") # metodo near para datos categoricos
-lc.crop = crop(lc.proj, imgs.r2[[2]]) # cortamos el lc al extent de la imagen
-plot(lc.crop, col = c("yellow","blue","green","purple")) # plotear lc cortado, cambiamos color de las categorias
+plot(lc.crop, col = c("yellow","blue","green","purple"))# plotear lc cortado, cambiamos color de las categorias
 
 
 separate_eight_day_composite = function(x, fechas){
