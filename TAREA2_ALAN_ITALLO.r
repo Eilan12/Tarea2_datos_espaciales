@@ -72,7 +72,8 @@ lc.crop[lc.crop < 500 & lc.crop >=400] = 400
 # guardamos el LandCover reclasificado
 writeRaster(lc.crop, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_reclasificado.tif", overwrite = TRUE)
 
-plot(lc.crop, col = c("yellow","purple","blue","green"))# plotear lc cortado, cambiamos color de las categorias
+plot(lc.crop, col = c("yellow","purple","blue","green"), 
+     main = "Landcover por categorias")# plotear lc cortado, cambiamos color de las categorias
 
 # Convertir lc.crop en un vector
 lc.crop_vec <- as.vector(lc.crop)
@@ -88,7 +89,7 @@ text(x = barplot(table(lc.crop_vec), col = c("yellow", "purple", "blue", "green"
      y = table(lc.crop_vec),
      labels = table(lc.crop_vec),
      pos = 3)
-o
+
 separate_eight_day_composite = function(x, fechas){
   # dias que faltan para terminar el mes
   days.dif = 1+(days_in_month(fechas) - day(fechas))
