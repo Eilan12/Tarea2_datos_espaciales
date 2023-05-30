@@ -10,14 +10,18 @@ library(ggplot2)
 library(readxl)
 library(vctrs)
 
-
 # Cargar funciones --------------------------------------------------------
-km = read_sf("C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/cuenca.kml")
+#km = read_sf("C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/cuenca.kml")
+km = read_sf("/Users/itallo/Documents/GitHub/Tarea2_datos_espaciales/cuenca.kml")
+
 km = mutate(km, Description = "Rio Aconcagua",altura = 1021)
 
-img.folder = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/landsat"
+#img.folder = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/landsat"
+img.folder = "/Users/itallo/Documents/GitHub/Tarea2_datos_espaciales/landsat"
 
-files = list.files(img.folder, pattern = "SR_B", full.names = TRUE)
+
+#files = list.files(img.folder, pattern = "SR_B", full.names = TRUE)
+files = list.files(img.folder, pattern = "B", full.names = TRUE)
 
 imgs = rast(files)
 imgs
@@ -28,7 +32,7 @@ img_ext
 img_ext[2]-img_ext[1]
 img_ext[4]-img_ext[3]
 
-km
+
 st_crs(imgs) == st_crs(km)
 
 img.crs = st_crs(imgs)
@@ -45,15 +49,20 @@ plot(imgs.m)
 
 imgs.cm = crop(imgs.m, vect(v))
 plot(imgs.cm)
+km
+imgs.cm
+
 
 imgs.r = project(imgs.cm, vect(km), method = "near")
 plot(imgs.r[[5]])
 
 options(scipen = 999)
 
-lc.file = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_CHILE_2014_b.tif"
-lc = rast(lc.file)
+#lc.file = "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_CHILE_2014_b.tif"
+lc.file = "/Users/itallo/Documents/GitHub/Tarea2_datos_espaciales/LC_CHILE_2014_b.tif"
 
+lc = rast(lc.file)
+lc
 # proyecamos el lc a la proyeccion de la imagen satelital
 lc.proj = project(lc, imgs.r[[5]], method = "bilinear") # metodo bilinear para datos categoricos
 lc.crop = crop(lc.proj, imgs.r[[5]]) # cortamos el lc al extent de la imagen
@@ -78,10 +87,10 @@ plot(lc.crop, col = c("yellow","purple","blue","green"),
 # Convertir lc.crop en un vector
 lc.crop_vec <- as.vector(lc.crop)
 
-# Obtener la tabla de frecuencias de las categorías de color
+# Obtener la tabla de frecuencias de las categor?as de color
 color_counts <- table(lc.crop_vec)
 
-# Crear un gráfico de barras de la cantidad por categoria
+# Crear un gr?fico de barras de la cantidad por categoria
 text(x = barplot(table(lc.crop_vec), col = c("yellow", "purple", "blue", "green"),
                  main = "Cantidad por categoria",
                  xlab = "Categoria", ylab = "Cantidad",
