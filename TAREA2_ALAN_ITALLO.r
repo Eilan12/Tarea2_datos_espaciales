@@ -74,7 +74,20 @@ writeRaster(lc.crop, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC
 
 plot(lc.crop, col = c("yellow","purple","blue","green"))# plotear lc cortado, cambiamos color de las categorias
 
+# Convertir lc.crop en un vector
+lc.crop_vec <- as.vector(lc.crop)
 
+# Obtener la tabla de frecuencias de las categorías de color
+color_counts <- table(lc.crop_vec)
+
+# Crear un gráfico de barras de la cantidad por categoria
+text(x = barplot(table(lc.crop_vec), col = c("yellow", "purple", "blue", "green"),
+                 main = "Cantidad por categoria",
+                 xlab = "Categoria", ylab = "Cantidad",
+                 ylim= c(0,6500000)),
+     y = table(lc.crop_vec),
+     labels = table(lc.crop_vec),
+     pos = 3)
 
 separate_eight_day_composite = function(x, fechas){
   # dias que faltan para terminar el mes
