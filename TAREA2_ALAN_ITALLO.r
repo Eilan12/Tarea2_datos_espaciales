@@ -63,15 +63,16 @@ plot(lc.crop)
 
 # Modificar pixeles de un raster
 lc.crop[lc.crop >= 500] = NA # selecciona todos los pixeles diferentes a 100, 200, 300 y 400 y les asiga NA
-lc.crop[lc.crop <= 200 & lc.crop >=100] = 100
-lc.crop[lc.crop <= 300 & lc.crop >=200] = 200
-lc.crop[lc.crop <= 400 & lc.crop >=300] = 300
-lc.crop[lc.crop <= 500 & lc.crop >=400] = 400
+lc.crop[lc.crop < 100] = NA
+lc.crop[lc.crop < 200 & lc.crop >=100] = 100
+lc.crop[lc.crop < 300 & lc.crop >=200] = 200
+lc.crop[lc.crop < 400 & lc.crop >=300] = 300
+lc.crop[lc.crop < 500 & lc.crop >=400] = 400
 
 # guardamos el LandCover reclasificado
 writeRaster(lc.crop, "C:/Users/alanp/Documents/5to/cs datos espaciales/tarea2/LC_reclasificado.tif", overwrite = TRUE)
 
-plot(lc.crop, col = c("yellow","blue","green","purple"))# plotear lc cortado, cambiamos color de las categorias
+plot(lc.crop, col = c("yellow","purple","blue","green"))# plotear lc cortado, cambiamos color de las categorias
 
 
 separate_eight_day_composite = function(x, fechas){
